@@ -1,0 +1,7 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+
+# 2 space indentation
+[*]
+indent_style = tab
+indent_size = 2
