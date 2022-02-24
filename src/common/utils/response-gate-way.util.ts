@@ -13,6 +13,7 @@ export class Response {
 		});
 	}
 	static error(error: any, event?: any) {
+		console.error('🚨: ', error);
 		if (event) {
 			console.error('Event input 👇');
 			console.error(event);

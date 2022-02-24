@@ -1,4 +1,4 @@
-import { ApiGatewayResponse } from '../interfaces';
+import { ApiGatewayResponse } from '@common/interfaces';
 
 export const formatJSONResponse = (response: ApiGatewayResponse) => {
 	return {

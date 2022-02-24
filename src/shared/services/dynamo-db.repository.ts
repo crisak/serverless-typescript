@@ -1,25 +1,70 @@
+import { BadRequest } from '@common/utils';
+import { TestUsers } from '@shared/entities/test-users.entity';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { Entity, Table } from 'dynamodb-toolbox';
 
+const userDefault = {
+	id: 'id' + Date.now().toString(),
+	username: 'cristian' + Date.now().toString(),
+	name: 'camilo',
+	image: 'data'
+};
 export class DynamoDbRepository {
-	constructor(private dynamoDb?: DocumentClient) {}
+	private dynamoDb = new DocumentClient();
 
-	async get(
-		params: DocumentClient.GetItemInput | any
-	): Promise<DocumentClient.GetItemOutput | any> {
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				console.trace('test log');
-				console.log('Hello');
-				resolve('Ok perfect ' + params);
-			}, 3000);
-		});
-		// return this.dynamoDb.get(params).promise();
+	private table = new Table({
+		name: process.env.DYNAMODB_TABLE_USERS,
+		partitionKey: 'id',
+		DocumentClient: this.dynamoDb,
+		entityField: false
+	});
+
+	private entity = new Entity({
+		name: process.env.DYNAMODB_TABLE_USERS,
+		attributes: {
+			id: { partitionKey: true },
+			username: 'string',
+			name: 'string',
+			image: 'string'
+		},
+		table: this.table
+	});
+
+	async add(user: TestUsers = userDefault): Promise<TestUsers> {
+		try {
+			console.log('->', process.env.DYNAMODB_TABLE_USERS);
+			await this.entity.put(user);
+			return user;
+		} catch (error) {
+			throw new BadRequest({
+				type: 'dynamodb',
+				message: error.message,
+				data: error
+			});
+		}
 	}
 
-	async put(
-		params: DocumentClient.PutItemInput
-	): Promise<DocumentClient.PutItemOutput> {
-		return this.dynamoDb.put(params).promise();
+	async get(id: string): Promise<TestUsers> {
+		try {
+			console.log('->', id);
+			const user = await this.entity.get({
+				id
+			});
+			console.log('response', user);
+			return user;
+		} catch (error) {
+			throw new BadRequest({
+				type: 'dynamodb',
+				message: error.message,
+				data: error
+			});
+		}
+	}
+
+	async put(id: string, user: Partial<TestUsers>): Promise<Partial<TestUsers>> {
+		const userUpdate = { id, ...user };
+		await this.entity.update(userUpdate);
+		return userUpdate;
 	}
 
 	async update(
