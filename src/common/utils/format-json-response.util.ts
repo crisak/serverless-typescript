@@ -1,4 +1,4 @@
-import { ApiGatewayResponse } from '../interfaces/api-gateway-response.interface';
+import { ApiGatewayResponse } from '../interfaces';
 
 export const formatJSONResponse = (response: ApiGatewayResponse) => {
 	return {

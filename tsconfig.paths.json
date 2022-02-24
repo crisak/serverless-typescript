@@ -1,9 +1,10 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@functions/*": ["src/functions/*"],
-      "@common/*": ["src/common/*"]
-    }
-  }
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@functions/*": ["src/functions/*"],
+			"@common/*": ["src/common/*"],
+			"@shared/*": ["src/shared/*"]
+		}
+	}
 }
