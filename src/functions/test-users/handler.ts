@@ -12,7 +12,6 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<
 	try {
 		const dynamoDBService = new DynamoDbRepository();
 		let response = null;
-		console.log('event.soruce', event.resource);
 
 		switch (event.resource) {
 			case '/users':
@@ -26,7 +25,9 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<
 				break;
 		}
 
-		return Response.success({ data: response });
+		return Response.success({
+			data: response
+		});
 	} catch (error) {
 		return Response.error(error, event);
 	}

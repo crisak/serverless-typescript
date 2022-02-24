@@ -6,13 +6,13 @@ const serverlessConfiguration: AWS = {
 	service: 'tracking-functions',
 	frameworkVersion: '2',
 	custom: {
-		stage: '${opt:stage}',
+		stage: '${opt:stage, "dev"}',
 		webpack: {
 			webpackConfig: './webpack.config.js',
 			includeModules: true
 		}
 	},
-	plugins: ['serverless-webpack'],
+	plugins: ['serverless-webpack', 'serverless-offline'],
 	provider: {
 		region: 'us-east-1',
 		name: 'aws',

@@ -44,14 +44,12 @@ export class DynamoDbRepository {
 		}
 	}
 
-	async get(id: string): Promise<TestUsers> {
+	async get(id: string): Promise<TestUsers | null> {
 		try {
-			console.log('->', id);
 			const user = await this.entity.get({
 				id
 			});
-			console.log('response', user);
-			return user;
+			return user.Item || null;
 		} catch (error) {
 			throw new BadRequest({
 				type: 'dynamodb',
