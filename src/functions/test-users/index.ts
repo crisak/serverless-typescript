@@ -2,6 +2,8 @@ import { handlerPath } from '@common/utils';
 import { FunctionAWS } from '@common/types';
 import schemaUserDto from './dto/user.dto';
 
+const resource = 'test-users';
+
 export default {
 	handler: `${handlerPath(__dirname)}/handler.main`,
 	environment: {
@@ -11,13 +13,13 @@ export default {
 		{
 			http: {
 				method: 'post',
-				path: 'users',
+				path: resource,
 				cors: true,
 				request: {
 					schemas: {
 						'application/json': {
 							schema: schemaUserDto,
-							name: 'PostUserDto'
+							name: 'PostTestUserDto'
 						}
 					}
 				}
@@ -26,7 +28,7 @@ export default {
 		{
 			http: {
 				method: 'get',
-				path: 'users/{id}',
+				path: `${resource}/{id}`,
 				cors: true
 			}
 		}

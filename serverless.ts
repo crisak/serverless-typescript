@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { trackingService, hello } from '@functions/index';
+import { testUsers, hello } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
 	service: 'tracking-functions',
@@ -34,7 +34,7 @@ const serverlessConfiguration: AWS = {
 		]
 	},
 	// import the function via paths
-	functions: { hello, 'test-users': trackingService },
+	functions: { hello, 'test-users': testUsers },
 	resources: {
 		Resources: {
 			TestUsersDynamoDBTable: {
