@@ -1,10 +1,10 @@
 export default {
-	type: "object",
+	type: 'object',
 	properties: {
-		serviceId: { type: "string" },
-		trackingId: { type: "string" },
-		courier: { type: "string" },
-		date: { type: "string" },
+		serviceId: { type: 'string' },
+		trackingId: { type: 'string' },
+		courier: { type: 'string' },
+		date: { type: 'string' }
 	},
-	required: ["serviceId", "trackingId", "courier", "date"],
+	required: ['serviceId', 'trackingId', 'courier', 'date']
 } as const;

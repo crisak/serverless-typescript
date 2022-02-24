@@ -7,13 +7,13 @@ import { httpJsonBodyParser } from '@common/middlewares';
 import schema from './schema';
 
 const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
+	event
 ) => {
-  try {
-    return Response.success({ message: `All ok`, data: event.body });
-  } catch (error) {
-    return Response.error(error, event);
-  }
+	try {
+		return Response.success({ message: `All ok`, data: event.body });
+	} catch (error) {
+		return Response.error(error, event);
+	}
 };
 
 export const main = httpJsonBodyParser(hello);

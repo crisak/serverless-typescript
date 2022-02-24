@@ -1,7 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import hello from '@functions/hello';
-import trackingService from '@functions/tracking-service';
+import { trackingService, hello } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
 	service: 'tracking-functions',

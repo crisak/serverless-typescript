@@ -6,13 +6,13 @@ import { Response } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 
 const trackingService: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
+	typeof schema
 > = async (event) => {
-  try {
-    return Response.success({ message: `All ok`, data: event.body });
-  } catch (error) {
-    return Response.error(error, event);
-  }
+	try {
+		return Response.success({ message: `All ok`, data: event.body });
+	} catch (error) {
+		return Response.error(error, event);
+	}
 };
 
 export const main = httpJsonBodyParser(trackingService);
