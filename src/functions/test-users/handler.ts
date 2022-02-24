@@ -1,26 +1,26 @@
 import 'source-map-support/register';
 
-import schema from './schema';
 import { httpJsonBodyParser } from '@common/middlewares';
 import { Response } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 import { DynamoDbRepository } from '@shared/services';
+import TestUserDto from './dto/user.dto';
 
 const trackingService: ValidatedEventAPIGatewayProxyEvent<
-	typeof schema
+	typeof TestUserDto
 > = async (event) => {
 	try {
 		const dynamoDBService = new DynamoDbRepository();
 		let response = null;
 
 		switch (event.resource) {
-			case '/users':
+			case '/test-users':
 				if (event.httpMethod === 'POST') {
 					response = await dynamoDBService.add(event.body as any);
 				}
 				break;
 
-			case '/users/{id}':
+			case '/test-users/{id}':
 				response = await dynamoDBService.get(event.pathParameters.id);
 				break;
 		}

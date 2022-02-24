@@ -1,2 +1,2 @@
-export { default as hello } from './hello';
+export { default as cognito } from './test-cognito';
 export { default as testUsers } from './test-users';

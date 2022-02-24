@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { testUsers, hello } from '@functions/index';
+import { testUsers, cognito } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
 	service: 'tracking-functions',
@@ -34,7 +34,7 @@ const serverlessConfiguration: AWS = {
 		]
 	},
 	// import the function via paths
-	functions: { hello, 'test-users': testUsers },
+	functions: { 'test-cognito': cognito, 'test-users': testUsers },
 	resources: {
 		Resources: {
 			TestUsersDynamoDBTable: {
@@ -46,6 +46,9 @@ const serverlessConfiguration: AWS = {
 					ProvisionedThroughput: {
 						ReadCapacityUnits: '1',
 						WriteCapacityUnits: '1'
+					},
+					StreamSpecification: {
+						StreamViewType: 'NEW_AND_OLD_IMAGES'
 					}
 				}
 			}
