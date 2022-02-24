@@ -1,5 +1,6 @@
 import schema from './schema';
-import { handlerPath } from '@libs/handlerResolver';
+import { handlerPath } from '@common/utils';
+import { FunctionAWS } from '@common/types';
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
@@ -10,10 +11,14 @@ export default {
         path: 'hello',
         request: {
           schemas: {
-            'application/json': schema
+            'application/json': {
+              schema,
+              name: 'PostHelloDto'
+            }
           }
-        }
+        },
+        cors: true
       }
     }
   ]
-}
+} as FunctionAWS;
