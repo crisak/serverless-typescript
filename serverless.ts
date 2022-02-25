@@ -1,10 +1,11 @@
 import type { AWS } from '@serverless/typescript';
 
-import { testUsers, cognito } from '@functions/index';
+import { testUsers, hobbies } from '@functions/index';
 
 const serverlessConfiguration: AWS = {
 	service: 'tracking-functions',
 	frameworkVersion: '2',
+	useDotenv: true,
 	custom: {
 		stage: '${opt:stage, "dev"}',
 		webpack: {
@@ -12,7 +13,11 @@ const serverlessConfiguration: AWS = {
 			includeModules: true
 		}
 	},
-	plugins: ['serverless-webpack', 'serverless-offline'],
+	plugins: [
+		'serverless-webpack',
+		'serverless-offline',
+		'serverless-dotenv-plugin'
+	],
 	provider: {
 		region: 'us-east-1',
 		name: 'aws',
@@ -34,7 +39,7 @@ const serverlessConfiguration: AWS = {
 		]
 	},
 	// import the function via paths
-	functions: { 'test-cognito': cognito, 'test-users': testUsers },
+	functions: { 'test-hobbies': hobbies, 'test-users': testUsers },
 	resources: {
 		Resources: {
 			TestUsersDynamoDBTable: {

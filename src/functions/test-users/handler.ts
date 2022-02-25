@@ -26,7 +26,7 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<
 		}
 
 		return Response.success({
-			data: response
+			data: response || null
 		});
 	} catch (error) {
 		return Response.error(error, event);

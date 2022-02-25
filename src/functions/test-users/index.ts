@@ -6,9 +6,6 @@ const resource = 'test-users';
 
 export default {
 	handler: `${handlerPath(__dirname)}/handler.main`,
-	environment: {
-		DYNAMODB_TABLE_USERS: 'Test-users-${self:custom.stage}'
-	},
 	events: [
 		{
 			http: {

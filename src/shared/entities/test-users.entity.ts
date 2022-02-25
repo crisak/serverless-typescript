@@ -3,4 +3,6 @@ export interface TestUsers {
 	username: string;
 	name: string;
 	image: string;
+	hasHobby: boolean;
+	hobbies: string[];
 }

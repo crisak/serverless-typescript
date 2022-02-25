@@ -1,18 +1,22 @@
-import { formatJSONResponse } from './format-json-response.util';
 import { BadRequest } from './bad-request.util';
 import { StatusCodes } from '@common/enums';
+import { APIGatewayProxyResult } from 'aws-lambda';
 
 export class Response {
-	static success({ statusCode = StatusCodes.OK, message = 'Success', data }) {
-		return formatJSONResponse({
+	static success({
+		statusCode = StatusCodes.OK,
+		message = 'Success',
+		data
+	}): APIGatewayProxyResult {
+		return {
 			statusCode,
-			body: {
+			body: JSON.stringify({
 				message,
 				data: data || null
-			}
-		});
+			})
+		};
 	}
-	static error(error: any, event?: any) {
+	static error(error: any, event?: any): APIGatewayProxyResult {
 		console.error('🚨: ', error);
 		if (event) {
 			console.error('Event input 👇');
@@ -30,9 +34,9 @@ export class Response {
 			statusCode = status;
 		}
 
-		return formatJSONResponse({
+		return {
 			statusCode,
-			body: responseData as any
-		});
+			body: JSON.stringify(responseData)
+		};
 	}
 }

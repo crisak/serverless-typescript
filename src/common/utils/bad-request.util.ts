@@ -1,19 +1,20 @@
 import { StatusCodes } from '@common/enums';
 
 export type MessageCode = `${string}${number}${'E' | 'B'}`;
+export type TypeError =
+	| 'exception'
+	| 'business'
+	| 'sqs'
+	| 'dynamodb'
+	| 'elasticsearch'
+	| 'cognito';
 
 /**
  * @docs https://www.ibm.com/docs/es/ibm-mq/9.1?topic=api-rest-error-handling
  */
 export class BadRequest implements BadRequestProps {
 	public statusCode: StatusCodes;
-	public type?:
-		| 'exception'
-		| 'business'
-		| 'sqs'
-		| 'dynamodb'
-		| 'elasticsearch'
-		| 'cognito';
+	public type?: TypeError;
 	public code?: MessageCode;
 	public message?: string;
 	public data?: any;
@@ -34,13 +35,7 @@ export class BadRequest implements BadRequestProps {
 
 export interface BadRequestProps {
 	statusCode?: StatusCodes;
-	type?:
-		| 'exception'
-		| 'business'
-		| 'sqs'
-		| 'dynamodb'
-		| 'elasticsearch'
-		| 'cognito';
+	type?: TypeError;
 	/**
 	 * @docs
 	 * code = MODnnnnX
