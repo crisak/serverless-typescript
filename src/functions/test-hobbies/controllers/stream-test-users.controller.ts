@@ -1,7 +1,7 @@
-import { BadRequest } from '@common/utils';
+import { Nullable } from '@common/types';
 import { TestUsers } from '@shared/entities';
 import { DynamoDbRepository } from '@shared/services';
-import { DynamoDBStreamEvent, StreamRecord } from 'aws-lambda';
+import { DynamoDBRecord, StreamRecord } from 'aws-lambda';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import deepEqual from 'deep-equal';
 import { AnimeResultDto, AnimeService } from '../services';
@@ -12,33 +12,25 @@ export class StreamTestUsersController {
 		private testUsersDynamoDBService: DynamoDbRepository
 	) {}
 
-	async run(event: DynamoDBStreamEvent) {
-		const listErrors: BadRequest[] = [];
-
-		for (const record of event.Records || []) {
-			try {
-				const { oldRecord, newRecord } = this.clearRecord(record.dynamodb);
-				if (deepEqual(oldRecord, newRecord)) {
-					continue;
-				}
-
-				if (newRecord.hasHobby && newRecord.hobbies?.length > 0) {
-					continue;
-				}
-
-				let hobby: AnimeResultDto = await this.animeService.getRandom();
-
-				await this.testUsersDynamoDBService.update(newRecord.id, {
-					hasHobby: true,
-					hobbies: [JSON.stringify(hobby)]
-				});
-			} catch (error) {
-				const errorFiltered = this.handleError(error);
-				listErrors.push(errorFiltered);
-			}
+	async run(record: DynamoDBRecord) {
+		const { oldRecord, newRecord } = this.clearRecord(record.dynamodb);
+		if (deepEqual(oldRecord, newRecord)) {
+			return 'Ok';
 		}
 
-		return listErrors;
+		if (newRecord.hasHobby && newRecord.hobbies?.length > 0) {
+			return 'Ok';
+		}
+
+		let hobby: Nullable<AnimeResultDto> = null;
+		if (newRecord.hasHobby) {
+			hobby = await this.animeService.getRandom();
+		}
+
+		await this.testUsersDynamoDBService.update(newRecord.id, {
+			hobbies: newRecord.hasHobby ? [JSON.stringify(hobby)] : []
+		});
+		return 'Ok';
 	}
 
 	private clearRecord(recordDynamoDB: StreamRecord): {
@@ -49,25 +41,19 @@ export class StreamTestUsersController {
 			recordDynamoDB.OldImage
 		) as TestUsers;
 
+		delete oldRecord['_ct'];
+		delete oldRecord['_md'];
+
 		const newRecord = DynamoDB.Converter.unmarshall(
 			recordDynamoDB.NewImage
 		) as TestUsers;
+
+		delete newRecord['_ct'];
+		delete newRecord['_md'];
 
 		return {
 			oldRecord,
 			newRecord
 		};
-	}
-
-	private handleError(error: any): BadRequest {
-		if (error instanceof BadRequest) {
-			return error;
-		}
-
-		return new BadRequest({
-			type: 'exception',
-			message: error?.message || `${this.constructor.name} exception error`,
-			data: error
-		});
 	}
 }
