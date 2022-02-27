@@ -14,6 +14,7 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
 	try {
 		console.log('👇 event');
 		console.log(event);
+		console.log(JSON.stringify(event, null, 2));
 		const dynamoDBService = new DynamoDbRepository();
 		let response = null;
 

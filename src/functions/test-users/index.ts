@@ -46,7 +46,7 @@ export default {
 							search: false
 						},
 						headers: {
-							'api-key-example-header': true
+							'api-key-example-header': false
 						}
 					}
 				},
