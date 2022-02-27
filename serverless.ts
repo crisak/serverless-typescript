@@ -11,12 +11,18 @@ const serverlessConfiguration: AWS = {
 		webpack: {
 			webpackConfig: './webpack.config.js',
 			includeModules: true
+		},
+		/** @doc https://www.serverless.com/plugins/serverless-api-gateway-caching */
+		apiGatewayCaching: {
+			enabled: true,
+			clusterSize: '0.5' /* 0.5 GB = 500 MB */
 		}
 	},
 	plugins: [
 		'serverless-webpack',
 		'serverless-offline',
-		'serverless-dotenv-plugin'
+		'serverless-dotenv-plugin',
+		'serverless-api-gateway-caching'
 	],
 	provider: {
 		region: 'us-east-1',
@@ -45,7 +51,7 @@ const serverlessConfiguration: AWS = {
 			TestUsersDynamoDBTable: {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
-					TableName: 'Test-users-${self:custom.stage}',
+					TableName: '${env:DYNAMODB_TABLE_USERS}',
 					AttributeDefinitions: [{ AttributeName: 'id', AttributeType: 'S' }],
 					KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
 					ProvisionedThroughput: {

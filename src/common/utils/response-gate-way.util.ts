@@ -9,6 +9,16 @@ export class Response {
 		data
 	}): APIGatewayProxyResult {
 		return {
+			/**
+			 * Fix error
+			 * "set the request's mode to 'no-cors' to fetch the resource with cors disabled"
+			 * Resolve:
+			 * ```js
+			 * headers: {
+			 * 	'Access-Control-Allow-Origin': '*'
+			 * },
+			 * ```
+			 */
 			statusCode,
 			body: JSON.stringify({
 				message,

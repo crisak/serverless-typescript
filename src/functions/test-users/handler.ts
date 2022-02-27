@@ -4,12 +4,16 @@ import { httpJsonBodyParser } from '@common/middlewares';
 import { Response } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 import { DynamoDbRepository } from '@shared/services';
-import TestUserDto from './dto/user.dto';
+import { PostUserDto, PatchUserDto } from './dto/user.dto';
 
-const trackingService: ValidatedEventAPIGatewayProxyEvent<
-	typeof TestUserDto
-> = async (event) => {
+type UserSchema = typeof PostUserDto | typeof PatchUserDto;
+
+const trackingService: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
+	event
+) => {
 	try {
+		console.log('👇 event');
+		console.log(event);
 		const dynamoDBService = new DynamoDbRepository();
 		let response = null;
 
@@ -21,7 +25,19 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<
 				break;
 
 			case '/test-users/{id}':
-				response = await dynamoDBService.get(event.pathParameters.id);
+				if (event.httpMethod === 'PATCH') {
+					await dynamoDBService.waitAsync(5000);
+					response = await dynamoDBService.update(
+						event.pathParameters.id,
+						event.body
+					);
+				} else {
+					if (event.queryStringParameters.search) {
+						response = (await dynamoDBService.waitAsync(5000)) || [];
+					} else {
+						response = await dynamoDBService.get(event.pathParameters.id);
+					}
+				}
 				break;
 		}
 

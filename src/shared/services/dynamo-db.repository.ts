@@ -3,6 +3,8 @@ import { TestUsers } from '@shared/entities/test-users.entity';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { Entity, Table } from 'dynamodb-toolbox';
 
+const waitAsync = (ms: number) =>
+	new Promise((resolve) => setTimeout(resolve, ms));
 export class DynamoDbRepository {
 	private dynamoDb = new DocumentClient();
 
@@ -38,6 +40,7 @@ export class DynamoDbRepository {
 
 	async get(id: string): Promise<TestUsers | null> {
 		try {
+			await waitAsync(4000);
 			const user = await this.entity.get({
 				id
 			});
@@ -67,4 +70,6 @@ export class DynamoDbRepository {
 			data: { error, input }
 		});
 	}
+
+	waitAsync = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 }
