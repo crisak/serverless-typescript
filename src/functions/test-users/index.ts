@@ -11,7 +11,8 @@ const defaultCorsHeaders = [
 	'X-Amz-Security-Token'
 ];
 
-export const CUSTOM_HEADER_TEST = 'custom-value-header-api-key';
+const CUSTOM_HEADER_TEST = 'custom-value-header-api-key';
+const INVALID_CACHE = 'Cache-Control';
 
 export default {
 	handler: `${handlerPath(__dirname)}/handler.main`,
@@ -37,8 +38,8 @@ export default {
 				path: `${resource}/{id}`,
 				cors: {
 					origin: ['*'],
-					methods: ['GET', 'PATCH', 'OPTIONS'] /* Ignore method PATCH cors */,
-					headers: [...defaultCorsHeaders, CUSTOM_HEADER_TEST]
+					methods: ['GET', 'PATCH', 'OPTIONS'] /* Ignore method POST cors */,
+					headers: [...defaultCorsHeaders, CUSTOM_HEADER_TEST, INVALID_CACHE]
 				},
 				authorizer: {
 					name: 'fulfillment-dynamic-auth-${self:custom.stage}',
@@ -52,7 +53,8 @@ export default {
 							search: false
 						},
 						headers: {
-							[CUSTOM_HEADER_TEST]: true
+							[CUSTOM_HEADER_TEST]: true,
+							[INVALID_CACHE]: false
 						}
 					}
 				},

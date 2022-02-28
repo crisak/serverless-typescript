@@ -1,15 +1,15 @@
 import 'source-map-support/register';
 
-import { httpJsonBodyParser } from '@common/middlewares';
-import { ResponseProxy } from '@common/utils';
+import { BadRequest, ResponseProxy, ValidObject } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 import { DynamoDbRepository } from '@shared/services';
 import { PostUserDto, PatchUserDto } from './dto/user.dto';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { StatusCodes } from '@common/enums';
 
 type UserSchema = typeof PostUserDto | typeof PatchUserDto;
 
-const testUsers: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
+const router: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
 	event
 ) => {
 	try {
@@ -30,10 +30,30 @@ const testUsers: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
 			case '/test-users/{id}':
 				if (event.httpMethod === 'PATCH') {
 					await dynamoDBService.waitAsync(5000);
-					response = await dynamoDBService.update(
-						event.pathParameters.id,
-						event.body
-					);
+					const userData = await dynamoDBService.get(event.pathParameters.id);
+					if (userData.username === 'errorInternalTest') {
+						await dynamoDBService.update(event.pathParameters.id, {
+							...event.body,
+							username: ''
+						});
+						throw new Error('Error invoke with native error');
+					}
+
+					response = await dynamoDBService.update(event.pathParameters.id, {
+						...event.body,
+						username: 'errorInternalTest'
+					});
+
+					if (event.body.name === 'invokeError-badRequest') {
+						throw new BadRequest({
+							type: 'business',
+							message: 'Error invoke with bad request custom'
+						});
+					}
+
+					if (event.body.name === 'invokeError-Error native') {
+						throw new Error('Error invoke with native error');
+					}
 
 					return {
 						message: 'Ok 🙃',
@@ -45,20 +65,42 @@ const testUsers: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
 					if (event.queryStringParameters?.search) {
 						response = (await dynamoDBService.waitAsync(5000)) || [];
 					} else {
+						if (event.pathParameters.id === 'invokeError-customError') {
+							throw new BadRequest({
+								type: 'business',
+								message: 'Error internal, no save in cache'
+							});
+						}
+
+						if (event.pathParameters.id === 'invokeError-error') {
+							throw new Error('Error internal, handle error native');
+						}
+
+						await dynamoDBService.waitAsync(4000);
 						response = await dynamoDBService.get(event.pathParameters.id);
 					}
 				}
 				break;
+			default:
+				throw new BadRequest({
+					message: 'Resource not found',
+					statusCode: StatusCodes.BAD_REQUEST
+				});
 		}
 
-		return ResponseProxy.success({
-			data: response || null
-		});
+		/* @ts-ignore */
+		if (configLambda.isProxy) {
+			return ResponseProxy.success({
+				data: response || null
+			});
+		}
+		return { message: 'ok', data: response || null };
 	} catch (error) {
 		/* @ts-ignore */
 		if (configLambda.isProxy) {
 			return ResponseProxy.error(error, event);
 		}
+
 		console.error('🚨 Error lambda custom: ', error);
 		throw error;
 	}
@@ -71,13 +113,23 @@ export const main = (event) => {
 
 	/** @ts-ignore */
 	if (configLambda.isProxy) {
-		return httpJsonBodyParser(testUsers);
+		console.log('IS_PROXY');
+		event.body = JSON.parse(event.body);
+		return router(event);
 	}
+
+	const isValid = ValidObject.isValid;
 
 	const formatEvent: APIGatewayProxyEvent = {
 		...event,
 		httpMethod: event.httpMethod || event.method,
-		resource: event.resource || event.requestPath
+		resource: event.resource || event.requestPath,
+		pathParameters: isValid(event.pathParameters)
+			? event.pathParameters
+			: event.path,
+		queryStringParameters: isValid(event.queryStringParameters)
+			? event.queryStringParameters
+			: event.query
 	};
-	return testUsers(formatEvent);
+	return router(formatEvent);
 };

@@ -40,7 +40,6 @@ export class DynamoDbRepository {
 
 	async get(id: string): Promise<TestUsers | null> {
 		try {
-			await waitAsync(4000);
 			const user = await this.entity.get({
 				id
 			});

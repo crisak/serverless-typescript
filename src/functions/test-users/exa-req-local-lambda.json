@@ -1,0 +1,51 @@
+{
+	"body": {
+		"name": "Carlos C."
+	},
+	"method": "PATCH",
+	"principalId": "offlineContext_authorizer_principalId",
+	"stage": "dev",
+	"cognitoPoolClaims": {
+		"sub": ""
+	},
+	"enhancedAuthContext": {
+		"principalId": "offlineContext_authorizer_principalId",
+		"claims": null
+	},
+	"headers": {
+		"Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0bmFtZSI6InFhb2xpbXBpY2Fzd2wxIiwidXNlcm5hbWUiOiJxYW9saW1waWNhc3dsMS5jcmlzdGlhbi5yb21lcm8iLCJpYXQiOjE2NDU3OTUxNDQsImV4cCI6MTY0NTc5NjA0NH0.AOhujLpCpTdBd9n3zmZjWoPi44kJTkzb8bYsRZvz3a0",
+		"Content-Type": "application/json",
+		"User-Agent": "PostmanRuntime/7.29.0",
+		"Accept": "*/*",
+		"Cache-Control": "no-cache",
+		"Postman-Token": "cf607afc-d3e9-4b7d-9a58-0616e4354c16",
+		"Host": "localhost:3000",
+		"Accept-Encoding": "gzip, deflate, br",
+		"Connection": "keep-alive",
+		"Content-Length": "27"
+	},
+	"query": {},
+	"path": {
+		"id": "309485092345"
+	},
+	"identity": {
+		"accountId": "offlineContext_accountId",
+		"apiKey": "offlineContext_apiKey",
+		"apiKeyId": "offlineContext_apiKeyId",
+		"caller": "offlineContext_caller",
+		"cognitoAuthenticationProvider": "offlineContext_cognitoAuthenticationProvider",
+		"cognitoAuthenticationType": "offlineContext_cognitoAuthenticationType",
+		"sourceIp": "127.0.0.1",
+		"user": "offlineContext_user",
+		"userAgent": "PostmanRuntime/7.29.0",
+		"userArn": "offlineContext_userArn"
+	},
+	"stageVariables": {},
+	"requestPath": "/test-users/309485092345",
+	"httpMethod": "PATCH",
+	"resource": "/test-users/309485092345",
+	"pathParameters": {
+		"id": "309485092345"
+	},
+	"queryStringParameters": {}
+}
