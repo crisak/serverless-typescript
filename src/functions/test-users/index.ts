@@ -3,6 +3,15 @@ import { FunctionAWS } from '@common/types';
 import { PostUserDto } from './dto/user.dto';
 
 const resource = 'test-users';
+const defaultCorsHeaders = [
+	'Content-Type',
+	'X-Amz-Date',
+	'Authorization',
+	'X-Api-Key',
+	'X-Amz-Security-Token'
+];
+
+export const CUSTOM_HEADER_TEST = 'custom-value-header-api-key';
 
 export default {
 	handler: `${handlerPath(__dirname)}/handler.main`,
@@ -26,19 +35,16 @@ export default {
 			http: {
 				method: 'get',
 				path: `${resource}/{id}`,
-				cors: true,
-				integration: 'lambda',
+				cors: {
+					origin: ['*'],
+					methods: ['GET', 'OPTIONS'] /* Ignore method PATCH cors */,
+					headers: [...defaultCorsHeaders, CUSTOM_HEADER_TEST]
+				},
 				authorizer: {
 					name: 'fulfillment-dynamic-auth-${self:custom.stage}',
-					resultTtlInSeconds: 120 /* 180 = 3 minutes */,
+					resultTtlInSeconds: 0 /* 180 = 3 minutes */,
 					type: 'token',
 					arn: '${env:ARN_LAMBDA_DYNAMIC_AUTH}'
-				},
-				response: {
-					headers: {
-						'Access-Control-Allow-Origin': "'*'",
-						'Access-all-public-data': "'example correct'"
-					}
 				},
 				request: {
 					parameters: {
@@ -46,7 +52,7 @@ export default {
 							search: false
 						},
 						headers: {
-							'api-key-example-header': false
+							[CUSTOM_HEADER_TEST]: true
 						}
 					}
 				},
@@ -56,7 +62,7 @@ export default {
 					cacheKeyParameters: [
 						{ name: 'request.path.id' },
 						{ name: 'request.querystring.search' },
-						{ name: 'request.header.api-key-example-header' }
+						{ name: `request.header.${CUSTOM_HEADER_TEST}` }
 					]
 				}
 			}
@@ -65,12 +71,26 @@ export default {
 			http: {
 				method: 'patch',
 				path: `${resource}/{id}`,
-				cors: true,
+				cors: false,
 				/**
 				 * You must use lambda integration (instead of the default
 				 * proxy integration) for this to work
 				 */
 				integration: 'lambda',
+				/* TODO - Work when is lambda integration (not working lambda proxy) */
+				response: {
+					headers: {
+						'Access-Control-Allow-Origin': "'*'",
+						'custom-response-header-all-responses': "'All ok'"
+					},
+					statusCodes: {
+						'200': {
+							headers: {
+								'custom-response-header-all-responses-200': "'Perfect :)'"
+							}
+						}
+					}
+				},
 				caching: {
 					enabled: true,
 					ttlInSeconds: 60 /* 300 = 5 minutes */,

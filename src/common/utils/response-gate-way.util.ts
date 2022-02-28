@@ -2,7 +2,7 @@ import { BadRequest } from './bad-request.util';
 import { StatusCodes } from '@common/enums';
 import { APIGatewayProxyResult } from 'aws-lambda';
 
-export class Response {
+export class ResponseProxy {
 	static success({
 		statusCode = StatusCodes.OK,
 		message = 'Success',
@@ -20,6 +20,9 @@ export class Response {
 			 * ```
 			 */
 			statusCode,
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			},
 			body: JSON.stringify({
 				message,
 				data: data || null
@@ -46,6 +49,9 @@ export class Response {
 
 		return {
 			statusCode,
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			},
 			body: JSON.stringify(responseData)
 		};
 	}

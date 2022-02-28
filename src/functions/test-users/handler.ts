@@ -1,17 +1,21 @@
 import 'source-map-support/register';
 
 import { httpJsonBodyParser } from '@common/middlewares';
-import { Response } from '@common/utils';
+import { ResponseProxy } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 import { DynamoDbRepository } from '@shared/services';
 import { PostUserDto, PatchUserDto } from './dto/user.dto';
 
 type UserSchema = typeof PostUserDto | typeof PatchUserDto;
 
-const trackingService: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
+const testUsers: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
 	event
 ) => {
 	try {
+		global['configLambda'] = {
+			isProxy: Boolean(event?.resource && event?.httpMethod)
+		};
+
 		console.log('👇 event');
 		console.log(event);
 		console.log(JSON.stringify(event, null, 2));
@@ -33,7 +37,7 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
 						event.body
 					);
 				} else {
-					if (event.queryStringParameters.search) {
+					if (event.queryStringParameters?.search) {
 						response = (await dynamoDBService.waitAsync(5000)) || [];
 					} else {
 						response = await dynamoDBService.get(event.pathParameters.id);
@@ -42,12 +46,12 @@ const trackingService: ValidatedEventAPIGatewayProxyEvent<UserSchema> = async (
 				break;
 		}
 
-		return Response.success({
+		return ResponseProxy.success({
 			data: response || null
 		});
 	} catch (error) {
-		return Response.error(error, event);
+		return ResponseProxy.error(error, event);
 	}
 };
 
-export const main = httpJsonBodyParser(trackingService);
+export const main = httpJsonBodyParser(testUsers);

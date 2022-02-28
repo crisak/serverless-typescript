@@ -1,6 +1,113 @@
 {
+	"resource": "/test-users/{id}",
+	"path": "/test-users/309485092345",
+	"httpMethod": "GET",
 	"headers": {
-		"Content-Type": "application/json"
+		"Accept": "*/*",
+		"Accept-Encoding": "gzip, deflate, br",
+		"Accept-Language": "en-US,en;q=0.9,es;q=0.8",
+		"Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0bmFtZSI6InFhb2xpbXBpY2Fzd2wxIiwidXNlcm5hbWUiOiJxYW9saW1waWNhc3dsMS5jcmlzdGlhbi5yb21lcm8iLCJpYXQiOjE2NDU5MzY1OTgsImV4cCI6MTY0NTkzNzQ5OH0.Phhiz6Yw_qI0j3v261jBYqRv2ac_z3UBKCVbU9QSFwU",
+		"cache-control": "no-cache",
+		"CloudFront-Forwarded-Proto": "https",
+		"CloudFront-Is-Desktop-Viewer": "true",
+		"CloudFront-Is-Mobile-Viewer": "false",
+		"CloudFront-Is-SmartTV-Viewer": "false",
+		"CloudFront-Is-Tablet-Viewer": "false",
+		"CloudFront-Viewer-Country": "CO",
+		"Host": "qwv4sr7826.execute-api.us-east-1.amazonaws.com",
+		"origin": "https://vitejs-vite-zpdhmz--3000.local.webcontainer.io",
+		"pragma": "no-cache",
+		"Referer": "https://vitejs-vite-zpdhmz--3000.local.webcontainer.io/",
+		"sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"",
+		"sec-ch-ua-mobile": "?0",
+		"sec-ch-ua-platform": "\"macOS\"",
+		"sec-fetch-dest": "empty",
+		"sec-fetch-mode": "cors",
+		"sec-fetch-site": "cross-site",
+		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36",
+		"Via": "2.0 9392bec93929f0dc915a3fd38b30faaa.cloudfront.net (CloudFront)",
+		"X-Amz-Cf-Id": "nfcCBiXmUC6SVD_B4CDhj7OLSbm1slJ4JwddnkqaM0ltyn0CExLmMA==",
+		"X-Amzn-Trace-Id": "Root=1-621affd6-5d2c36a17beedf584f656bd1",
+		"X-Forwarded-For": "201.221.172.90, 64.252.186.69",
+		"X-Forwarded-Port": "443",
+		"X-Forwarded-Proto": "https"
 	},
-	"body": "{\"name\": \"Frederic\"}"
+	"multiValueHeaders": {
+		"Accept": ["*/*"],
+		"Accept-Encoding": ["gzip, deflate, br"],
+		"Accept-Language": ["en-US,en;q=0.9,es;q=0.8"],
+		"Authorization": [
+			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0bmFtZSI6InFhb2xpbXBpY2Fzd2wxIiwidXNlcm5hbWUiOiJxYW9saW1waWNhc3dsMS5jcmlzdGlhbi5yb21lcm8iLCJpYXQiOjE2NDU5MzY1OTgsImV4cCI6MTY0NTkzNzQ5OH0.Phhiz6Yw_qI0j3v261jBYqRv2ac_z3UBKCVbU9QSFwU"
+		],
+		"cache-control": ["no-cache"],
+		"CloudFront-Forwarded-Proto": ["https"],
+		"CloudFront-Is-Desktop-Viewer": ["true"],
+		"CloudFront-Is-Mobile-Viewer": ["false"],
+		"CloudFront-Is-SmartTV-Viewer": ["false"],
+		"CloudFront-Is-Tablet-Viewer": ["false"],
+		"CloudFront-Viewer-Country": ["CO"],
+		"Host": ["qwv4sr7826.execute-api.us-east-1.amazonaws.com"],
+		"origin": ["https://vitejs-vite-zpdhmz--3000.local.webcontainer.io"],
+		"pragma": ["no-cache"],
+		"Referer": ["https://vitejs-vite-zpdhmz--3000.local.webcontainer.io/"],
+		"sec-ch-ua": [
+			"\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\""
+		],
+		"sec-ch-ua-mobile": ["?0"],
+		"sec-ch-ua-platform": ["\"macOS\""],
+		"sec-fetch-dest": ["empty"],
+		"sec-fetch-mode": ["cors"],
+		"sec-fetch-site": ["cross-site"],
+		"User-Agent": [
+			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36"
+		],
+		"Via": ["2.0 9392bec93929f0dc915a3fd38b30faaa.cloudfront.net (CloudFront)"],
+		"X-Amz-Cf-Id": ["nfcCBiXmUC6SVD_B4CDhj7OLSbm1slJ4JwddnkqaM0ltyn0CExLmMA=="],
+		"X-Amzn-Trace-Id": ["Root=1-621affd6-5d2c36a17beedf584f656bd1"],
+		"X-Forwarded-For": ["201.221.172.90, 64.252.186.69"],
+		"X-Forwarded-Port": ["443"],
+		"X-Forwarded-Proto": ["https"]
+	},
+	"queryStringParameters": null,
+	"multiValueQueryStringParameters": null,
+	"pathParameters": {
+		"id": "309485092345"
+	},
+	"stageVariables": null,
+	"requestContext": {
+		"resourceId": "5ilm0u",
+		"authorizer": {
+			"principalId": "user-auth",
+			"integrationLatency": 21
+		},
+		"resourcePath": "/test-users/{id}",
+		"httpMethod": "GET",
+		"extendedRequestId": "OLzpnEiZoAMFzZA=",
+		"requestTime": "27/Feb/2022:04:36:38 +0000",
+		"path": "/dev/test-users/309485092345",
+		"accountId": "122155166549",
+		"protocol": "HTTP/1.1",
+		"stage": "dev",
+		"domainPrefix": "qwv4sr7826",
+		"requestTimeEpoch": 1645936598947,
+		"requestId": "baa9582c-ef56-43c6-b241-57cf493067c6",
+		"identity": {
+			"cognitoIdentityPoolId": null,
+			"accountId": null,
+			"cognitoIdentityId": null,
+			"caller": null,
+			"sourceIp": "201.221.172.90",
+			"principalOrgId": null,
+			"accessKey": null,
+			"cognitoAuthenticationType": null,
+			"cognitoAuthenticationProvider": null,
+			"userArn": null,
+			"userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36",
+			"user": null
+		},
+		"domainName": "qwv4sr7826.execute-api.us-east-1.amazonaws.com",
+		"apiId": "qwv4sr7826"
+	},
+	"body": null,
+	"isBase64Encoded": false
 }

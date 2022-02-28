@@ -1,0 +1,63 @@
+{
+	"body": {},
+	"method": "GET",
+	"principalId": "user-auth",
+	"stage": "dev",
+	"cognitoPoolClaims": {
+		"sub": ""
+	},
+	"enhancedAuthContext": {
+		"principalId": "user-auth",
+		"integrationLatency": "16"
+	},
+	"headers": {
+		"Accept": "*/*",
+		"Accept-Encoding": "gzip, deflate, br",
+		"Accept-Language": "en-US,en;q=0.9,es;q=0.8",
+		"Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJob3N0bmFtZSI6InFhb2xpbXBpY2Fzd2wxIiwidXNlcm5hbWUiOiJxYW9saW1waWNhc3dsMS5jcmlzdGlhbi5yb21lcm8iLCJpYXQiOjE2NDU5MzA1MzEsImV4cCI6MTY0NTkzMTQzMX0.NURbshOmxnMpm4WiM1jbfpJqTX4Ajmzgf-qDN4Uc6p0",
+		"cache-control": "no-cache",
+		"CloudFront-Forwarded-Proto": "https",
+		"CloudFront-Is-Desktop-Viewer": "true",
+		"CloudFront-Is-Mobile-Viewer": "false",
+		"CloudFront-Is-SmartTV-Viewer": "false",
+		"CloudFront-Is-Tablet-Viewer": "false",
+		"CloudFront-Viewer-Country": "CO",
+		"Host": "qwv4sr7826.execute-api.us-east-1.amazonaws.com",
+		"origin": "https://vitejs-vite-zpdhmz--3000.local.webcontainer.io",
+		"pragma": "no-cache",
+		"Referer": "https://vitejs-vite-zpdhmz--3000.local.webcontainer.io/",
+		"sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"98\", \"Google Chrome\";v=\"98\"",
+		"sec-ch-ua-mobile": "?0",
+		"sec-ch-ua-platform": "\"macOS\"",
+		"sec-fetch-dest": "empty",
+		"sec-fetch-mode": "cors",
+		"sec-fetch-site": "cross-site",
+		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36",
+		"Via": "2.0 bed2eec06f0c35a2391f26eaa5553d42.cloudfront.net (CloudFront)",
+		"X-Amz-Cf-Id": "P5gee-NPvW1_-TcWLOJJBb42rHcZDptqdLHb7aHgWkgPvTP1Q5shkg==",
+		"X-Amzn-Trace-Id": "Root=1-621ae824-4e0fb9f227734d53467b9829",
+		"X-Forwarded-For": "201.221.172.90, 64.252.186.95",
+		"X-Forwarded-Port": "443",
+		"X-Forwarded-Proto": "https"
+	},
+	"query": {},
+	"path": {
+		"id": "309485092345"
+	},
+	"identity": {
+		"cognitoIdentityPoolId": "",
+		"accountId": "",
+		"cognitoIdentityId": "",
+		"caller": "",
+		"sourceIp": "201.221.172.90",
+		"principalOrgId": "",
+		"accessKey": "",
+		"cognitoAuthenticationType": "",
+		"cognitoAuthenticationProvider": "",
+		"userArn": "",
+		"userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36",
+		"user": ""
+	},
+	"stageVariables": {},
+	"requestPath": "/test-users/{id}"
+}
