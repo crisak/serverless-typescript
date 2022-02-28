@@ -1,6 +1,6 @@
 import { handlerPath } from '@common/utils';
 import { FunctionAWS } from '@common/types';
-import { PostUserDto } from './dto/user.dto';
+import { PatchUserDto, PostUserDto } from './dto/user.dto';
 
 const resource = 'test-users';
 const defaultCorsHeaders = [
@@ -25,7 +25,7 @@ export default {
 					schemas: {
 						'application/json': {
 							schema: PostUserDto,
-							name: 'PostTestUserDto'
+							name: 'TestUserDto'
 						}
 					}
 				}
@@ -37,7 +37,7 @@ export default {
 				path: `${resource}/{id}`,
 				cors: {
 					origin: ['*'],
-					methods: ['GET', 'OPTIONS'] /* Ignore method PATCH cors */,
+					methods: ['GET', 'PATCH', 'OPTIONS'] /* Ignore method PATCH cors */,
 					headers: [...defaultCorsHeaders, CUSTOM_HEADER_TEST]
 				},
 				authorizer: {
@@ -71,24 +71,23 @@ export default {
 			http: {
 				method: 'patch',
 				path: `${resource}/{id}`,
-				cors: false,
 				/**
 				 * You must use lambda integration (instead of the default
 				 * proxy integration) for this to work
 				 */
 				integration: 'lambda',
-				/* TODO - Work when is lambda integration (not working lambda proxy) */
+				request: {
+					schemas: {
+						'application/json': {
+							schema: PatchUserDto,
+							name: 'PatchTestUserDto'
+						}
+					}
+				},
 				response: {
 					headers: {
 						'Access-Control-Allow-Origin': "'*'",
 						'custom-response-header-all-responses': "'All ok'"
-					},
-					statusCodes: {
-						'200': {
-							headers: {
-								'custom-response-header-all-responses-200': "'Perfect :)'"
-							}
-						}
 					}
 				},
 				caching: {
@@ -97,7 +96,7 @@ export default {
 					cacheKeyParameters: [
 						{ name: 'request.path.id' },
 						{
-							name: 'integration.request.header.bodyValue',
+							name: 'integration.request.header.bodyPatchUserDto',
 							mappedFrom: 'method.request.body'
 						}
 					]

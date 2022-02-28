@@ -4,18 +4,15 @@ export const PostUserDto = {
 		id: { type: 'string' },
 		username: { type: 'string' },
 		name: { type: 'string' },
-		image: { type: 'string' }
-		// hasHobby: { type: 'boolean' }
+		image: { type: 'string' },
+		hasHobby: { type: 'boolean' }
 	},
 	required: ['id', 'username', 'name', 'image']
 };
 
+const { id, ...propertiesModel } = PostUserDto.properties;
+
 export const PatchUserDto = {
 	type: 'object',
-	properties: {
-		name: { type: 'string' },
-		image: { type: 'string' },
-		hasHobby: { type: 'boolean' }
-	},
-	required: []
+	properties: propertiesModel
 };
