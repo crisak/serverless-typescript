@@ -6,10 +6,23 @@ const resource = 'test-users';
 const defaultCorsHeaders = [
 	'Content-Type',
 	'X-Amz-Date',
-	'Authorization',
+	'Authorizatio,n',
 	'X-Api-Key',
 	'X-Amz-Security-Token'
 ];
+
+const responseCustom = (
+	statusCode,
+	pattern = '.*statusCode":STATUS_CODE.*'
+) => {
+	return {
+		pattern: pattern.replace('STATUS_CODE', statusCode),
+		template: '$input.path("$.errorMessage")',
+		headers: {
+			'Content-Type': "'application/json'"
+		}
+	};
+};
 
 const CUSTOM_HEADER_TEST = 'custom-value-header-api-key';
 const INVALID_CACHE = 'Cache-Control';
@@ -90,6 +103,21 @@ export default {
 					headers: {
 						'Access-Control-Allow-Origin': "'*'",
 						'custom-response-header-all-responses': "'All ok'"
+					},
+					statusCodes: {
+						'200': {
+							pattern: '' // Default response method
+						},
+						'400': responseCustom(400),
+						'404': responseCustom(404),
+						'500': responseCustom(
+							500,
+							'[sS]*(Processs?exiteds?befores?completings?request|.*statusCode":STATUS_CODE.*)[sS]*'
+						),
+						'504': responseCustom(
+							504,
+							'[sS]*(.*statusCode":STATUS_CODE.*)[sS]*|(.*Task timed out after d+.d+ seconds$)'
+						)
 					}
 				},
 				caching: {

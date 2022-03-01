@@ -4,7 +4,10 @@ import { BadRequest, ResponseProxy, ValidObject } from '@common/utils';
 import { ValidatedEventAPIGatewayProxyEvent } from '@common/types';
 import { DynamoDbRepository } from '@shared/services';
 import { PostUserDto, PatchUserDto } from './dto/user.dto';
-import { APIGatewayProxyEvent } from 'aws-lambda';
+import {
+	APIGatewayEventRequestContext,
+	APIGatewayProxyEvent
+} from 'aws-lambda';
 import { StatusCodes } from '@common/enums';
 
 type UserSchema = typeof PostUserDto | typeof PatchUserDto;
@@ -30,30 +33,82 @@ const router: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
 			case '/test-users/{id}':
 				if (event.httpMethod === 'PATCH') {
 					await dynamoDBService.waitAsync(5000);
+
+					if (event.body.name === '1.throwErrorCustom-400') {
+						throw new BadRequest({
+							statusCode: StatusCodes.BAD_REQUEST,
+							type: 'business',
+							data: 'Hello',
+							message: 'This error internal of server'
+						}).toString();
+					}
+
+					if (event.body.name === '2.throwErrorCustom-404') {
+						throw new BadRequest({
+							statusCode: StatusCodes.NOT_FOUND,
+							type: 'business',
+							data: 'Hello',
+							message: 'This error internal of server'
+						}).toString();
+					}
+
+					if (event.body.name === '3.throwErrorCustom-500') {
+						throw new BadRequest({
+							statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
+							type: 'business',
+							data: 'Hello',
+							message: 'This error internal of server'
+						}).toString();
+					}
+
+					if (event.body.name === '4.throwErrorCustom-504') {
+						throw new BadRequest({
+							statusCode: StatusCodes.TIME_OUT,
+							type: 'business',
+							data: 'Hello',
+							message: 'This error internal of server'
+						}).toString();
+					}
+
+					if (event.body.name === '5.throwErrorCustom-504') {
+						throw new BadRequest({
+							statusCode: StatusCodes.UNAUTHORIZED,
+							type: 'business',
+							data: 'Hello',
+							message: 'Task timed out after 1000.1000 seconds'
+						}).toString();
+					}
+
+					if (event.body.name === '6.throwErrorCustom-504') {
+						throw new BadRequest({
+							statusCode: StatusCodes.BAD_REQUEST,
+							type: 'business',
+							data: 'Hello',
+							message: 'Task timed out after 1000.1000 seconds'
+						}).toString();
+					}
+
+					if (event.body.name === 'invokeError-400') {
+						throw new Error('[400] This is error of bad request');
+					}
+
+					if (event.body.name === 'invokeError-500') {
+						throw new Error('[500] This is a error "internal server"');
+					}
+
 					const userData = await dynamoDBService.get(event.pathParameters.id);
 					if (userData.username === 'errorInternalTest') {
 						await dynamoDBService.update(event.pathParameters.id, {
 							...event.body,
 							username: ''
 						});
-						throw new Error('Error invoke with native error');
+						throw new Error('[400] Error username has "errorInternalTest"');
 					}
 
 					response = await dynamoDBService.update(event.pathParameters.id, {
 						...event.body,
 						username: 'errorInternalTest'
 					});
-
-					if (event.body.name === 'invokeError-badRequest') {
-						throw new BadRequest({
-							type: 'business',
-							message: 'Error invoke with bad request custom'
-						});
-					}
-
-					if (event.body.name === 'invokeError-Error native') {
-						throw new Error('Error invoke with native error');
-					}
 
 					return {
 						message: 'Ok 🙃',
@@ -106,9 +161,12 @@ const router: ValidatedEventAPIGatewayProxyEvent<UserSchema> | any = async (
 	}
 };
 
-export const main = (event) => {
+export const main = (event, context: APIGatewayEventRequestContext) => {
+	console.log('context:', context);
+
 	global['configLambda'] = {
-		isProxy: Boolean(event?.resource && event?.httpMethod)
+		isProxy: Boolean(event?.resource && event?.httpMethod),
+		requestId: context.requestId || ''
 	};
 
 	/** @ts-ignore */

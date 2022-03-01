@@ -36,7 +36,7 @@ export class ResponseProxy {
 			console.error(event);
 		}
 
-		let { statusCode, ...responseData } = new BadRequest({
+		let { statusCode: statusCode, ...responseData } = new BadRequest({
 			message: error?.message || 'Exception error',
 			data: error
 		});

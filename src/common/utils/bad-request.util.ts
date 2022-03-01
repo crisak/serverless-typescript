@@ -18,18 +18,26 @@ export class BadRequest implements BadRequestProps {
 	public code?: MessageCode;
 	public message?: string;
 	public data?: any;
+	public requestId?: string;
 	constructor({
 		type,
 		code,
 		message,
 		data,
-		statusCode
+		statusCode,
+		requestId
 	}: Partial<BadRequestProps>) {
 		this.type = type || 'exception';
 		this.code = code || null;
 		this.message = message || '';
 		this.data = data || {};
 		this.statusCode = statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
+		/** @ts-ignore */
+		this.requestId = configLambda.requestId || requestId || '';
+	}
+
+	toString(): string {
+		return JSON.stringify(this);
 	}
 }
 
@@ -54,4 +62,5 @@ export interface BadRequestProps {
 	code?: MessageCode;
 	message?: string;
 	data?: any;
+	requestId?: string;
 }
